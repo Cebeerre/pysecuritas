@@ -38,5 +38,11 @@ Parameters (strict order)
 * Alarm Model (nowadays, almost everybody uses the SDVFAST)
 * Country (uppercase)
 * Language (lowercase)
+* ACTION:
+** EST -> STATUS
+** PERI -> PERIMETER/OUTDOOR
+** ARM -> ARMED/INDOOR
+** ARMNIGHT -> ARMED/NIGHT MODE
+** DARM -> SWITCH OFF EVERYTHING
 
 I'm not a developer myself, so don't be too harsh on me !
