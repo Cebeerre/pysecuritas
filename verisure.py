@@ -108,5 +108,5 @@ if __name__ == '__main__':
     elif sys.argv[8] == 'ARMNIGHT':
         output = client.arm_nigh()
     elif sys.argv[8] == 'DARM':
-        coutput = lient.disarm_all()
+        coutput = client.disarm_all()
     print(output)
