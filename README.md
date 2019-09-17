@@ -29,9 +29,9 @@ or from the command line:
 ```
 $ ./verisure.py username password 0000000 SDVFAST ES es 1 EST
 {'result': 'OK', 'status': '0', 'message': 'Tu Alarma está desconectada'}
+```
 
-
-Parameters (in the same order)
+Parameters (strict order)
 * Username (the same than used in the Mobile App/Web)
 * Password (the same than used in the Mobile App/Web)
 * Installation/Facility Number
