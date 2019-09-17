@@ -1,7 +1,7 @@
 # VerisureAPIClient
 Client to access Verisure / Securitas Direct Mobile API
 
-Tested with a Spanish account, might work with others.
+Tested with a Spanish account, might work in other countries.
 
 Right now is pretty simple. TODO:
 * Error Control
@@ -36,3 +36,5 @@ Parameters (in the same order)
 * Alarm Model (nowadays, almost everybody uses the SDVFAST)
 * Country (uppercase)
 * Language (lowercase)
+
+I'm not a developer myself, so don't be too harsh on me !
