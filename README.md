@@ -7,6 +7,8 @@ Right now is pretty simple. TODO:
 * Error Control
 * Clean-up & Documentation
 
+I managed to create a webservice with this and Flask and integrate everything together with IFTT using WebHooks.
+
 # Usage
 
 You can either call it as a module:
