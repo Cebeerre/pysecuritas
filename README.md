@@ -24,6 +24,12 @@ Type "help", "copyright", "credits" or "license" for more information.
 {'result': 'OK', 'status': '0', 'message': 'Tu Alarma está desconectada'}
 ```
 
+* client.get_panel_status()
+* client.arm_outside()
+* client.arm_total_inside()
+* client.arm_nigh()
+* client.disarm_all()
+
 or from the command line:
 
 ```
