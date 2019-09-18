@@ -29,6 +29,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 * client.arm_total_inside()
 * client.arm_nigh()
 * client.disarm_all()
+* client.log()
 
 or from the command line:
 
@@ -50,5 +51,6 @@ Parameters (strict order)
   * ARM -> ARMED/INDOOR
   * ARMNIGHT -> ARMED/NIGHT MODE
   * DARM -> SWITCH OFF EVERYTHING
+  * ACT -> LOG ACTIVITY
 
 I'm not a developer myself, so don't be too harsh on me !
