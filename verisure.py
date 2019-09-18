@@ -116,5 +116,8 @@ if __name__ == '__main__':
     elif sys.argv[8] == 'ARMNIGHT':
         output = client.arm_nigh()
     elif sys.argv[8] == 'DARM':
-        coutput = client.disarm_all()
+        output = client.disarm_all()
+    elif sys.argv[8] == 'ACT':
+        output = client.log()
+
     print(output)
