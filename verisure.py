@@ -4,6 +4,7 @@ import requests
 import xmltodict
 from datetime import datetime
 import time
+import json
 
 class VerisureAPIClient():
     BASE_URL='https://mob2217.securitasdirect.es:12010/WebService/ws.do'
@@ -37,9 +38,7 @@ class VerisureAPIClient():
         while res != 'OK':
             output = self.call_verisure_get('GET',payload)
             res = output['PET']['RES']
-        status = output['PET']['STATUS']
-        msg = output['PET']['MSG']
-        return { 'result': res, 'status': status, 'message': msg }
+        return json.dumps(output)
 
     def generate_id(self):
         ID='IPH_________________________'+self.user+datetime.now().strftime("%Y%m%d%H%M%S")
@@ -55,7 +54,7 @@ class VerisureAPIClient():
         payload = self.OUT_PAYLOAD
         payload.update({'request': 'CLS', 'hash': hash, 'ID': self.generate_id()})
         output = self.call_verisure_get('GET', payload)
-        return output
+        return json.dumps(output)
 
     def get_panel_status(self):
         hash = self.get_login_hash()
@@ -91,6 +90,15 @@ class VerisureAPIClient():
         status = self.op_verisure('ARMNIGHT', hash, id)
         self.logout(hash)
         return status
+
+    def log(self):
+        hash = self.get_login_hash()
+        id = self.generate_id()
+        payload = self.OP_PAYLOAD
+        payload.update({'request': 'ACT_V2', 'hash':hash, 'ID':id, 'timefilter': '3', 'activityfilter': '0'})
+        output = self.call_verisure_get('GET',payload)
+        return json.dumps(output)
+
 
 if __name__ == '__main__':
     import sys
