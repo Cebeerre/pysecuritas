@@ -56,3 +56,7 @@ Parameters (strict order)
   * ACT -> LOG ACTIVITY
 
 I'm not a developer myself, so don't be too harsh on me !
+
+# Related projects:
+
+[Securitasdirect](https://github.com/segalion/securitasdirect): Hass.io component under development. 
