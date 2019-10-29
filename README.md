@@ -9,6 +9,8 @@ Right now is pretty simple. TODO:
 
 I managed to create a webservice with this and Flask and integrate everything together with IFTT using WebHooks.
 
+THIS PROJECT IS NOT IN ANY WAY ASSOCIATED WITH OR RELATED TO THE SECURITAS DIRECT-VERISURE GROUP COMPANIES.
+
 # Usage
 
 You can either call it as a module:
