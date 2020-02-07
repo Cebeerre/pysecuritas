@@ -1,7 +1,9 @@
 # VerisureAPIClient
 Client to access Verisure / Securitas Direct Mobile API
 
-**Deprecated:** Focused right now in the Alexa integration via Fauxmo: [https://github.com/Cebeerre/VerisureEchoDevice](https://github.com/Cebeerre/VerisureEchoDevice)
+**Abandoned:** Focused right now in the Alexa integration via Fauxmo: [https://github.com/Cebeerre/VerisureEchoDevice](https://github.com/Cebeerre/VerisureEchoDevice)
+
+API specification and known projects: [https://github.com/Cebeerre/VerisureEUAPI](https://github.com/Cebeerre/VerisureEUAPI)
 
 Tested with a Spanish account, might work in other countries.
 
