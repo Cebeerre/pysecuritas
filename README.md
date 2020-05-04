@@ -42,6 +42,8 @@ Available commands are:
 - `DARM`: disarms everything
 - `ACT`: output the activity log
 - `EST`: get the current alarm status
+- `ARMANNEX`: arm the secondary alarm
+- `DARMANNEX`: disarm the secondary alarm
 
 Example:
 
