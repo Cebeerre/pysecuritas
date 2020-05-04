@@ -16,7 +16,8 @@ Verisure/SecuritasDirect API Client
 https://github.com/Cebeerre/VerisureAPIClient
 
 positional arguments:
-  COMMAND               Your request/command
+  COMMAND               Your request/command: PERI, ARM, ARMNIGHT, ARMDAY,
+                        DARM, EST, ARMANNEX, DARMANNEX, ACT
 
 optional arguments:
   -h, --help            show this help message and exit

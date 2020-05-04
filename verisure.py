@@ -7,7 +7,9 @@ import time
 import json
 import argparse
 
-ALARM_OPS = ('PERI','ARM','ARMNIGHT','ARMDAY','DARM','EST','ARMANNEX','DARMANNEX')
+ALARM_OPS = ('PERI', 'ARM', 'ARMNIGHT', 'ARMDAY',
+             'DARM', 'EST', 'ARMANNEX', 'DARMANNEX')
+
 
 class VerisureAPIClient():
     BASE_URL = 'https://mob2217.securitasdirect.es:12010/WebService/ws.do'
@@ -44,7 +46,7 @@ class VerisureAPIClient():
         while res != 'OK':
             output = self.call_verisure_get('GET', payload)
             res = output['PET']['RES']
-        return json.dumps(output,indent=2)
+        return json.dumps(output, indent=2)
 
     def generate_id(self):
         ID = 'IPH_________________________' + self.user + \
@@ -64,7 +66,7 @@ class VerisureAPIClient():
         output = self.call_verisure_get('GET', payload)
         return json.dumps(output)
 
-    def operate_alarm(self,action):
+    def operate_alarm(self, action):
         hash = self.get_login_hash()
         id = self.generate_id()
         status = self.op_verisure(action, hash, id)
@@ -78,12 +80,12 @@ class VerisureAPIClient():
         payload.update({'request': 'ACT_V2', 'hash': hash,
                         'ID': id, 'timefilter': '5', 'activityfilter': '0'})
         output = self.call_verisure_get('GET', payload)
-        return json.dumps(output,indent=2)
+        return json.dumps(output, indent=2)
 
 
 def create_args_parser():
     desc = 'Verisure/SecuritasDirect API Client\nhttps://github.com/Cebeerre/VerisureAPIClient'
-    commands = ','.join(ALARM_OPS)+',ACT'
+    commands = ', '.join(ALARM_OPS) + ', ACT'
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument('-u',
                         '--username',
@@ -106,7 +108,7 @@ def create_args_parser():
                         help='Your language (lowercase): es, it, fr, en, pt ...',
                         required=True)
     parser.add_argument('COMMAND',
-                        help='Your request/command: '+commands,
+                        help='Your request/command: ' + commands,
                         type=str)
     return parser
 
@@ -119,6 +121,7 @@ def main():
         print(client.operate_alarm(args.COMMAND))
     elif args.COMMAND == 'ACT':
         print(client.log())
+
 
 if __name__ == '__main__':
     main()
