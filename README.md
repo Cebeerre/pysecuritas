@@ -16,8 +16,17 @@ Verisure/SecuritasDirect API Client
 https://github.com/Cebeerre/VerisureAPIClient
 
 positional arguments:
-  COMMAND               Your request/command: PERI, ARM, ARMNIGHT, ARMDAY,
-                        DARM, EST, ARMANNEX, DARMANNEX, ACT
+  COMMAND               ARM: arm all sensors (inside)
+                        ARMDAY: arm in day mode (inside)
+                        ARMNIGHT: arm in night mode (inside)
+                        PERI: arm (only) the perimeter sensors
+                        DARM: disarm everything (not the annex)
+                        ARMANNEX: arm the secondary alarm
+                        DARMANNEX: disarm the secondary alarm
+                        EST: return the panel status
+                        ACT_V2: get the activity log
+                        SRV: SIM Number and INSTIBS
+                        MYINSTALLATION: Sensor IDs and other info
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -32,18 +41,6 @@ optional arguments:
   -l LANGUAGE, --language LANGUAGE
                         Your language (lowercase): es, it, fr, en, pt ...
 ```
-
-Available commands are:
-
-- `ARM`: arm the main alarm
-- `ARMNIGHT`: arm in night mode
-- `ARMDAY`: arm in day mode
-- `PERI`: arm the perimeter sensors
-- `DARM`: disarms everything
-- `ACT`: output the activity log
-- `EST`: get the current alarm status
-- `ARMANNEX`: arm the secondary alarm
-- `DARMANNEX`: disarm the secondary alarm
 
 Example:
 

@@ -6,9 +6,32 @@ from datetime import datetime
 import time
 import json
 import argparse
+import textwrap
+import itertools
 
-ALARM_OPS = ('PERI', 'ARM', 'ARMNIGHT', 'ARMDAY',
-             'DARM', 'EST', 'ARMANNEX', 'DARMANNEX')
+DALARM_OPS = {
+    'ARM': 'arm all sensors (inside)',
+    'ARMDAY': 'arm in day mode (inside)',
+    'ARMNIGHT': 'arm in night mode (inside)',
+    'PERI': 'arm (only) the perimeter sensors',
+    'DARM': 'disarm everything (not the annex)',
+    'ARMANNEX': 'arm the secondary alarm',
+    'DARMANNEX': 'disarm the secondary alarm',
+    'EST': 'return the panel status'
+}
+
+DAPI_OPS = {
+    'ACT_V2': 'get the activity log',
+    'SRV': 'SIM Number and INSTIBS',
+    'MYINSTALLATION': 'Sensor IDs and other info'
+}
+
+ALARM_OPS = list(DALARM_OPS.keys())
+API_OPS = list(DAPI_OPS.keys())
+ALL_OPS = dict(itertools.chain(DALARM_OPS.items(), DAPI_OPS.items()))
+HELP_OPS = '\n'.join([': '.join(i) for i in ALL_OPS.items()])
+PANEL = 'SDVFAST'
+TIMEFILTER = '3'
 
 
 class VerisureAPIClient():
@@ -38,14 +61,21 @@ class VerisureAPIClient():
 
     def op_verisure(self, action, hash, id):
         payload = self.OP_PAYLOAD
-        payload.update({'request': action + '1', 'hash': hash, 'ID': id})
-        self.call_verisure_get('GET', payload)
-        payload['request'] = action + '2'
-        output = self.call_verisure_get('GET', payload)
-        res = output['PET']['RES']
-        while res != 'OK':
+        payload.update({'request': action, 'hash': hash, 'ID': id})
+        if action in ALARM_OPS:
+            payload['request'] = action + '1'
+            self.call_verisure_get('GET', payload)
+            payload['request'] = action + '2'
             output = self.call_verisure_get('GET', payload)
             res = output['PET']['RES']
+            while res != 'OK':
+                output = self.call_verisure_get('GET', payload)
+                res = output['PET']['RES']
+        elif action in API_OPS:
+            if action == 'ACT_V2':
+                payload.update(
+                    {'timefilter': TIMEFILTER, 'activityfilter': '0'})
+            output = self.call_verisure_get('GET', payload)
         return json.dumps(output, indent=2)
 
     def generate_id(self):
@@ -73,20 +103,11 @@ class VerisureAPIClient():
         self.logout(hash)
         return status
 
-    def log(self):
-        hash = self.get_login_hash()
-        id = self.generate_id()
-        payload = self.OP_PAYLOAD
-        payload.update({'request': 'ACT_V2', 'hash': hash,
-                        'ID': id, 'timefilter': '5', 'activityfilter': '0'})
-        output = self.call_verisure_get('GET', payload)
-        return json.dumps(output, indent=2)
-
 
 def create_args_parser():
     desc = 'Verisure/SecuritasDirect API Client\nhttps://github.com/Cebeerre/VerisureAPIClient'
-    commands = ', '.join(ALARM_OPS) + ', ACT'
-    parser = argparse.ArgumentParser(description=desc)
+    parser = argparse.ArgumentParser(
+        description=desc, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-u',
                         '--username',
                         help='Username used in the web page/mobile app.',
@@ -108,7 +129,7 @@ def create_args_parser():
                         help='Your language (lowercase): es, it, fr, en, pt ...',
                         required=True)
     parser.add_argument('COMMAND',
-                        help='Your request/command: ' + commands,
+                        help=textwrap.dedent(HELP_OPS),
                         type=str)
     return parser
 
@@ -116,11 +137,9 @@ def create_args_parser():
 def main():
     args = create_args_parser().parse_args()
     client = VerisureAPIClient(args.username, args.password,
-                               args.installation, 'SDVFAST', args.country, args.language, 1)
-    if args.COMMAND in ALARM_OPS:
+                               args.installation, PANEL, args.country, args.language, 1)
+    if (args.COMMAND in ALARM_OPS) or (args.COMMAND in API_OPS):
         print(client.operate_alarm(args.COMMAND))
-    elif args.COMMAND == 'ACT':
-        print(client.log())
 
 
 if __name__ == '__main__':
