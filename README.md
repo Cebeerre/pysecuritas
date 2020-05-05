@@ -50,16 +50,10 @@ You'll get a json with the API output:
 
 ```
 {
-  "PET": {
-    "RES": "OK",
-    "STATUS": "0",
-    "MSG": "Your Alarm is deactivated",
-    "NUMINST": "12345",
-    "BLOQ": {
-      "@remotereqactive": "1",
-      "#text": "Estamos mejorando nuestros servicios. Por favor intentelo de nuevo mas tarde. Gracias por confiar en Securitas Direct"
-    }
-  }
+  "RES": "OK",
+  "STATUS": "0",
+  "MSG": "Your Alarm is deactivated",
+  "NUMINST": "12345"
 }
 ```
 

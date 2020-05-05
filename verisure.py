@@ -76,7 +76,9 @@ class VerisureAPIClient():
                 payload.update(
                     {'timefilter': self.TIMEFILTER, 'activityfilter': '0'})
             output = self.call_verisure_get('GET', payload)
-        return json.dumps(output, indent=2)
+        clean_output = output['PET']
+        del clean_output['BLOQ']
+        return json.dumps(clean_output, indent=2)
 
     def generate_id(self):
         ID = 'IPH_________________________' + self.user + \
