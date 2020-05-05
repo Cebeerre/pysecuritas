@@ -57,4 +57,15 @@ You'll get a json with the API output:
 }
 ```
 
+You can use it as well as a python class so you can use it in your integrations:
+
+```
+>>> from verisure import VerisureAPIClient
+>>> my_dict = { 'username': 'michael', 'password': 'mypassword', 'language':'en', 'country':'GB', 'installation':'12345' }
+>>> client=VerisureAPIClient(**my_dict)
+>>> output=client.operate_alarm('EST')
+>>> output
+OrderedDict([('RES', 'OK'), ('STATUS', '0'), ('MSG', 'Your Alarm is deactivated'), ('NUMINST', '12345')])
+```
+
 I'm not a developer myself, so don't be too harsh on me !

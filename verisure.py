@@ -78,7 +78,7 @@ class VerisureAPIClient():
             output = self.call_verisure_get('GET', payload)
         clean_output = output['PET']
         del clean_output['BLOQ']
-        return json.dumps(clean_output, indent=2)
+        return clean_output
 
     def generate_id(self):
         ID = 'IPH_________________________' + self.user + \
@@ -96,15 +96,19 @@ class VerisureAPIClient():
         payload.update({'request': 'CLS', 'hash': hash,
                         'ID': self.generate_id()})
         output = self.call_verisure_get('GET', payload)
-        return json.dumps(output)
+        return None
 
     def operate_alarm(self, action):
         if (action in self.ALARM_OPS) or (action in self.API_OPS):
-            hash = self.get_login_hash()
-            id = self.generate_id()
-            status = self.op_verisure(action, hash, id)
-            self.logout(hash)
-            return status
+            try:
+                hash = self.get_login_hash()
+                id = self.generate_id()
+                status = self.op_verisure(action, hash, id)
+                self.logout(hash)
+                return status
+            except:
+                output = { 'RES':'ERROR', 'MSG':'Something went wrong. Check your credentials and/or the installation ID' }
+                return output
 
 
 def create_args_parser(help_cmd):
@@ -143,7 +147,8 @@ def main():
     args = create_args_parser(help_commands).parse_args()
     initparams = vars(args)
     client = VerisureAPIClient(**initparams)
-    print(client.operate_alarm(args.COMMAND))
+    output=client.operate_alarm(args.COMMAND)
+    print(json.dumps(output, indent=2))
 
 
 if __name__ == '__main__':
