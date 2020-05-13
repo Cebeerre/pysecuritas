@@ -118,7 +118,7 @@ class VerisureAPIClient():
             id = self.generate_id()
             if (action == 'IMG'):
                 if self.sensor == None:
-                    status = { 'RES': 'KO', 'MSG': 'Missing Sensor ID'}
+                    status = {'RES': 'KO', 'MSG': 'Missing Sensor ID'}
                     return status
                 self.instibs = self.op_verisure('SRV', hash, id)[
                     'INSTALATION']['INSTIBS']
@@ -131,19 +131,23 @@ class VerisureAPIClient():
                     self.idsignal = log['@idsignal']
                     self.signaltype = log['@signaltype']
                 output = self.op_verisure('INF', hash, id)
+                files = {}
                 for i in range(1, 4):
-                    f = open(datetime.now().strftime(
-                        '%Y%m%d%H%M%S') + '_' + str(i) + '.jpg', 'wb')
+                    filename = datetime.now().strftime('%Y%m%d%H%M%S') + '_' + str(i) + '.jpg'
+                    key = 'IMG' + str(i)
+                    files.update({key: filename})
+                    f = open(filename, 'wb')
                     f.write(base64.b64decode(
                         output['DEVICES']['DEVICE']['IMG'][i - 1]['#text']))
                     f.close()
                     status = {'RES': 'OK', 'MSG': 'Images written to disk.'}
+                    status.update({'FILES': files})
             else:
                 status = self.op_verisure(action, hash, id)
             self.logout(hash)
             return status
         else:
-            status = { 'RES': 'KO', 'MSG': 'Invalid command.'}
+            status = {'RES': 'KO', 'MSG': 'Invalid command.'}
             return status
 
 
