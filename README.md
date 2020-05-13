@@ -9,7 +9,7 @@ API specification and known projects: [https://github.com/Cebeerre/VerisureEUAPI
 
 ```
 usage: verisure.py [-h] -u USERNAME -p PASSWORD -i INSTALLATION -c COUNTRY -l
-                   LANGUAGE
+                   LANGUAGE [-s SENSOR]
                    COMMAND
 
 Verisure/SecuritasDirect API Client
@@ -24,6 +24,7 @@ positional arguments:
                         ARMANNEX: arm the secondary alarm
                         DARMANNEX: disarm the secondary alarm
                         EST: return the panel status
+                        IMG: Take a picture (requires -s)
                         ACT_V2: get the activity log
                         SRV: SIM Number and INSTIBS
                         MYINSTALLATION: Sensor IDs and other info
@@ -40,6 +41,8 @@ optional arguments:
                         Your country (UPPERCASE): ES, IT, FR, GB, PT ...
   -l LANGUAGE, --language LANGUAGE
                         Your language (lowercase): es, it, fr, en, pt ...
+  -s SENSOR, --sensor SENSOR
+                        The sensor ID (to take a picture using IMG)
 ```
 
 Example:
