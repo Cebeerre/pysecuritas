@@ -13,6 +13,7 @@ import base64
 
 class VerisureAPIClient():
     BASE_URL = 'https://mob2217.securitasdirect.es:12010/WebService/ws.do'
+    requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
     DALARM_OPS = {
         'ARM': 'arm all sensors (inside)',
         'ARMDAY': 'arm in day mode (inside)',
