@@ -31,6 +31,7 @@ class VerisureAPIClient():
         'MYINSTALLATION': 'Sensor IDs and other info'
     }
     PANEL = 'SDVFAST'
+    CALLBY = 'AND_61'
     TIMEFILTER = '3'
     RATELIMIT = 1
     ALARM_OPS = list(DALARM_OPS.keys())
@@ -42,7 +43,8 @@ class VerisureAPIClient():
         self.LOGIN_PAYLOAD = {'Country': args.get('country'),
                               'user': args.get('username'), 'pwd': args.get('password'), 'lang': args.get('language')}
         self.OP_PAYLOAD = {'Country': args.get('country'), 'user': args.get('username'),
-                           'pwd': args.get('password'), 'lang': args.get('language'), 'panel': self.PANEL, 'numinst': args.get('installation')}
+                           'pwd': args.get('password'), 'lang': args.get('language'), 'panel': self.PANEL, 
+                           'callby': self.CALLBY, 'numinst': args.get('installation')}
         self.OUT_PAYLOAD = {'Country': args.get('country'), 'user': args.get('username'),
                             'pwd': args.get('password'), 'lang': args.get('language'), 'numinst': '(null)'}
 
@@ -91,7 +93,7 @@ class VerisureAPIClient():
         return clean_output
 
     def generate_id(self):
-        ID = 'IPH_________________________' + self.user + \
+        ID = 'AND_________________________' + self.user + \
             datetime.now().strftime('%Y%m%d%H%M%S')
         return ID
 
