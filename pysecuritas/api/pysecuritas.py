@@ -1,5 +1,9 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    :copyright: © pysecuritas, All Rights Reserved
+"""
+from typing import Dict
+
 import requests
 import xmltodict
 from datetime import datetime
@@ -10,47 +14,31 @@ import textwrap
 import itertools
 import base64
 
+from pysecuritas.core.commands import DALARM_OPS, DAPI_OPS, ALARM_OPS, API_OPS
+
 
 class pysecuritas():
     BASE_URL = 'https://mob2217.securitasdirect.es:12010/WebService/ws.do'
     requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
-    DALARM_OPS = {
-        'ARM': 'arm all sensors (inside)',
-        'ARMDAY': 'arm in day mode (inside)',
-        'ARMNIGHT': 'arm in night mode (inside)',
-        'PERI': 'arm (only) the perimeter sensors',
-        'DARM': 'disarm everything (not the annex)',
-        'ARMANNEX': 'arm the secondary alarm',
-        'DARMANNEX': 'disarm the secondary alarm',
-        'EST': 'return the panel status',
-        'IMG': 'Take a picture (requires -s)'
-    }
-    DAPI_OPS = {
-        'ACT_V2': 'get the activity log',
-        'SRV': 'SIM Number and INSTIBS',
-        'MYINSTALLATION': 'Sensor IDs and other info'
-    }
     PANEL = 'SDVFAST'
     CALLBY = 'AND_61'
     TIMEFILTER = '3'
     RATELIMIT = 1
-    ALARM_OPS = list(DALARM_OPS.keys())
-    API_OPS = list(DAPI_OPS.keys())
 
-    def __init__(self, **args):
-        self.user = args.get('username')
-        self.sensor = args.get('sensor')
-        self.LOGIN_PAYLOAD = {'Country': args.get('country'),
-                              'user': args.get('username'), 'pwd': args.get('password'), 'lang': args.get('language')}
-        self.OP_PAYLOAD = {'Country': args.get('country'), 'user': args.get('username'),
-                           'pwd': args.get('password'), 'lang': args.get('language'), 'panel': self.PANEL, 
-                           'callby': self.CALLBY, 'numinst': args.get('installation')}
-        self.OUT_PAYLOAD = {'Country': args.get('country'), 'user': args.get('username'),
-                            'pwd': args.get('password'), 'lang': args.get('language'), 'numinst': '(null)'}
+    def __init__(self, args: argparse.Namespace):
+        self.user = args.username
+        self.sensor = args.sensor
+        self.LOGIN_PAYLOAD = {'Country': args.country,
+                              'user': self.user, 'pwd': args.password, 'lang': args.language}
+        self.OP_PAYLOAD = {'Country': args.country, 'user': self.user,
+                           'pwd': args.password, 'lang': args.language, 'panel': self.PANEL,
+                           'callby': self.CALLBY, 'numinst': args.installation}
+        self.OUT_PAYLOAD = {'Country': args.country, 'user': self.user,
+                            'pwd': args.password, 'lang': args.language, 'numinst': '(null)'}
 
     def return_commands(self):
         all_ops = dict(itertools.chain(
-            self.DALARM_OPS.items(), self.DAPI_OPS.items()))
+            DALARM_OPS.items(), DAPI_OPS.items()))
         return all_ops
 
     def call_verisure_get(self, method, parameters):
@@ -74,7 +62,7 @@ class pysecuritas():
         if action == 'INF':
             payload.update({'idsignal': self.idsignal,
                             'signaltype': self.signaltype})
-        if action in self.ALARM_OPS:
+        if action in ALARM_OPS:
             payload['request'] = action + '1'
             self.call_verisure_get('GET', payload)
             payload['request'] = action + '2'
@@ -83,7 +71,7 @@ class pysecuritas():
             while res != 'OK':
                 output = self.call_verisure_get('GET', payload)
                 res = output['PET']['RES']
-        elif (action in self.API_OPS) or (action == 'INF'):
+        elif (action in API_OPS) or (action == 'INF'):
             if action == 'ACT_V2':
                 payload.update(
                     {'timefilter': self.TIMEFILTER, 'activityfilter': '0'})
@@ -114,7 +102,7 @@ class pysecuritas():
         return None
 
     def operate_alarm(self, action):
-        if (action in self.ALARM_OPS) or (action in self.API_OPS):
+        if (action in ALARM_OPS) or (action in API_OPS):
             hash = self.get_login_hash()
             if type(hash) is list:
                 return hash
@@ -153,50 +141,3 @@ class pysecuritas():
             status = {'RES': 'KO', 'MSG': 'Invalid command.'}
             return status
 
-
-def create_args_parser(help_cmd):
-    desc = 'Securitas Direct API Client (My Verisure)\nhttps://github.com/Cebeerre/pysecuritas'
-    parser = argparse.ArgumentParser(
-        description=desc, formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-u',
-                        '--username',
-                        help='Username used in the web page/mobile app.',
-                        required=True)
-    parser.add_argument('-p',
-                        '--password',
-                        help='Password used in the web page/mobile app.',
-                        required=True)
-    parser.add_argument('-i',
-                        '--installation',
-                        help='Installation/Facility number (appears on the website).',
-                        required=True)
-    parser.add_argument('-c',
-                        '--country',
-                        help='Your country (UPPERCASE): ES, IT, FR, GB, PT ...',
-                        required=True)
-    parser.add_argument('-l',
-                        '--language',
-                        help='Your language (lowercase): es, it, fr, en, pt ...',
-                        required=True)
-    parser.add_argument('-s',
-                        '--sensor',
-                        help='The sensor ID (to take a picture using IMG)',
-                        required=None)
-    parser.add_argument('COMMAND',
-                        help=textwrap.dedent(help_cmd),
-                        type=str)
-    return parser
-
-
-def main():
-    commands = pysecuritas().return_commands()
-    help_commands = '\n'.join([': '.join(i) for i in commands.items()])
-    args = create_args_parser(help_commands).parse_args()
-    initparams = vars(args)
-    client = pysecuritas(**initparams)
-    output = client.operate_alarm(args.COMMAND)
-    print(json.dumps(output, indent=2))
-
-
-if __name__ == '__main__':
-    main()
