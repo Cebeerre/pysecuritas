@@ -1,5 +1,9 @@
 # VerisureAPIClient
-Client to access Verisure / Securitas Direct Mobile API
+
+Client to access Securitas Direct through the API used by the mobile Apps:
+
+- [https://play.google.com/store/apps/details?id=com.securitasdirect.android.mycontrol&hl=en&gl=US](Android App)
+- [https://play.google.com/store/apps/details?id=com.securitasdirect.android.mycontrol&hl=en&gl=US](IOS App)
 
 API specification and known projects: [https://github.com/Cebeerre/VerisureEUAPI](https://github.com/Cebeerre/VerisureEUAPI)
 
@@ -8,12 +12,12 @@ API specification and known projects: [https://github.com/Cebeerre/VerisureEUAPI
 # Usage
 
 ```
-usage: verisure.py [-h] -u USERNAME -p PASSWORD -i INSTALLATION -c COUNTRY -l
+usage: pysecuritas.py [-h] -u USERNAME -p PASSWORD -i INSTALLATION -c COUNTRY -l
                    LANGUAGE [-s SENSOR]
                    COMMAND
 
 Verisure/SecuritasDirect API Client
-https://github.com/Cebeerre/VerisureAPIClient
+https://github.com/Cebeerre/pysecuritas
 
 positional arguments:
   COMMAND               ARM: arm all sensors (inside)
@@ -47,7 +51,7 @@ optional arguments:
 
 Example:
 
-`$ ./verisure.py -u michael -p mypassword -i 12345 -c GB -l en EST`
+`$ ./pysecuritas.py -u michael -p mypassword -i 12345 -c GB -l en EST`
 
 You'll get a json with the API output:
 
@@ -63,9 +67,9 @@ You'll get a json with the API output:
 You can use it as well as a python class so you can use it in your integrations:
 
 ```
->>> from verisure import VerisureAPIClient
+>>> from verisure import pysecuritas
 >>> my_dict = { 'username': 'michael', 'password': 'mypassword', 'language':'en', 'country':'GB', 'installation':'12345' }
->>> client=VerisureAPIClient(**my_dict)
+>>> client=pysecuritas(**my_dict)
 >>> output=client.operate_alarm('EST')
 >>> output
 OrderedDict([('RES', 'OK'), ('STATUS', '0'), ('MSG', 'Your Alarm is deactivated'), ('NUMINST', '12345')])
