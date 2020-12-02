@@ -1,9 +1,11 @@
 # VerisureAPIClient
 
-Client to access Securitas Direct through the API used by the mobile Apps:
+Client to access Securitas Direct through the API used by the following mobile Apps:
 
-- [https://play.google.com/store/apps/details?id=com.securitasdirect.android.mycontrol&hl=en&gl=US](Android App)
-- [https://play.google.com/store/apps/details?id=com.securitasdirect.android.mycontrol&hl=en&gl=US](IOS App)
+- [Android App](https://play.google.com/store/apps/details?id=com.securitasdirect.android.mycontrol&hl=en&gl=US)
+- [IOS App](https://play.google.com/store/apps/details?id=com.securitasdirect.android.mycontrol&hl=en&gl=US)
+
+If you have a working account in the app, the client should work as well.
 
 API specification and known projects: [https://github.com/Cebeerre/VerisureEUAPI](https://github.com/Cebeerre/VerisureEUAPI)
 
