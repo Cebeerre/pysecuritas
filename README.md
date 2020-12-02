@@ -69,7 +69,7 @@ You'll get a json with the API output:
 You can use it as well as a python class so you can use it in your integrations:
 
 ```
->>> from verisure import pysecuritas
+>>> from pysecuritas import pysecuritas
 >>> my_dict = { 'username': 'michael', 'password': 'mypassword', 'language':'en', 'country':'GB', 'installation':'12345' }
 >>> client=pysecuritas(**my_dict)
 >>> output=client.operate_alarm('EST')
