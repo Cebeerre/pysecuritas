@@ -18,7 +18,7 @@ usage: pysecuritas.py [-h] -u USERNAME -p PASSWORD -i INSTALLATION -c COUNTRY -l
                    LANGUAGE [-s SENSOR]
                    COMMAND
 
-Verisure/SecuritasDirect API Client
+Securitas Direct API Client
 https://github.com/Cebeerre/pysecuritas
 
 positional arguments:
