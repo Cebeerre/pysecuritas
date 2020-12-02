@@ -1,4 +1,4 @@
-# VerisureAPIClient
+# Securitas Direct API Client
 
 Client to access Securitas Direct through the API used by the following mobile Apps:
 
