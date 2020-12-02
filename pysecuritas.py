@@ -11,7 +11,7 @@ import itertools
 import base64
 
 
-class VerisureAPIClient():
+class pysecuritas():
     BASE_URL = 'https://mob2217.securitasdirect.es:12010/WebService/ws.do'
     requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
     DALARM_OPS = {
@@ -155,7 +155,7 @@ class VerisureAPIClient():
 
 
 def create_args_parser(help_cmd):
-    desc = 'Verisure/SecuritasDirect API Client\nhttps://github.com/Cebeerre/VerisureAPIClient'
+    desc = 'Securitas Direct API Client (My Verisure)\nhttps://github.com/Cebeerre/pysecuritas'
     parser = argparse.ArgumentParser(
         description=desc, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-u',
@@ -189,11 +189,11 @@ def create_args_parser(help_cmd):
 
 
 def main():
-    commands = VerisureAPIClient().return_commands()
+    commands = pysecuritas().return_commands()
     help_commands = '\n'.join([': '.join(i) for i in commands.items()])
     args = create_args_parser(help_commands).parse_args()
     initparams = vars(args)
-    client = VerisureAPIClient(**initparams)
+    client = pysecuritas(**initparams)
     output = client.operate_alarm(args.COMMAND)
     print(json.dumps(output, indent=2))
 
