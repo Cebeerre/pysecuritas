@@ -7,7 +7,7 @@ Client to access Securitas Direct through the API used by the following mobile A
 
 If you have a working account in the app, the client should work as well.
 
-API specification and known projects: [https://github.com/Cebeerre/VerisureEUAPI](https://github.com/Cebeerre/VerisureEUAPI)
+[API specification and known projects](https://github.com/Cebeerre/SecuritasDirectAPI)
 
 **_NOTE:_** THIS PROJECT IS NOT IN ANY WAY ASSOCIATED WITH OR RELATED TO THE SECURITAS DIRECT-VERISURE GROUP COMPANIES. The information here and online is for educational and resource purposes only and therefore the developers do not endorse or condone any inappropriate use of it, and take no legal responsibility for the functionality or security of your alarms and devices.
 
