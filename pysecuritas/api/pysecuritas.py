@@ -2,24 +2,18 @@
 """
     :copyright: © pysecuritas, All Rights Reserved
 """
-from typing import Dict
 
-import requests
-import xmltodict
-from datetime import datetime
-import time
-import json
 import argparse
-import textwrap
-import itertools
 import base64
+import itertools
+import time
+from datetime import datetime
 
 from pysecuritas.core.commands import DALARM_OPS, DAPI_OPS, ALARM_OPS, API_OPS
+from pysecuritas.core.session import Session
 
 
 class pysecuritas():
-    BASE_URL = 'https://mob2217.securitasdirect.es:12010/WebService/ws.do'
-    requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
     PANEL = 'SDVFAST'
     CALLBY = 'AND_61'
     TIMEFILTER = '3'
@@ -35,6 +29,8 @@ class pysecuritas():
                            'callby': self.CALLBY, 'numinst': args.installation}
         self.OUT_PAYLOAD = {'Country': args.country, 'user': self.user,
                             'pwd': args.password, 'lang': args.language, 'numinst': '(null)'}
+        self.session = Session().set_username(args.username).set_password(args.password).set_country(
+            args.country).set_lang(args.language).set_installation(args.installation)
 
     def return_commands(self):
         all_ops = dict(itertools.chain(
@@ -44,14 +40,10 @@ class pysecuritas():
     def call_verisure_get(self, method, parameters):
         time.sleep(self.RATELIMIT)
         if method == 'GET':
-            response = requests.get(self.BASE_URL, params=parameters)
-        elif method == 'POST':
-            response = requests.post(self.BASE_URL, params=parameters)
-        if response.status_code == 200:
-            output = xmltodict.parse(response.text)
-            return output
-        else:
-            return None
+            return self.session.get(parameters)
+
+        if method == 'POST':
+            return self.session.post(parameters)
 
     def op_verisure(self, action, hash, id):
         payload = self.OP_PAYLOAD
@@ -82,24 +74,16 @@ class pysecuritas():
 
     def generate_id(self):
         ID = 'AND_________________________' + self.user + \
-            datetime.now().strftime('%Y%m%d%H%M%S')
+             datetime.now().strftime('%Y%m%d%H%M%S')
         return ID
 
     def get_login_hash(self):
-        payload = self.LOGIN_PAYLOAD
-        payload.update({'request': 'LOGIN', 'ID': self.generate_id()})
-        output = self.call_verisure_get('POST', payload)
-        if output['PET']['RES'] == 'OK':
-            return output['PET']['HASH']
-        else:
-            return output
+        self.session.connect()
+
+        return self.session.login_hash
 
     def logout(self, hash):
-        payload = self.OUT_PAYLOAD
-        payload.update({'request': 'CLS', 'hash': hash,
-                        'ID': self.generate_id()})
-        output = self.call_verisure_get('GET', payload)
-        return None
+        self.session.close()
 
     def operate_alarm(self, action):
         if (action in ALARM_OPS) or (action in API_OPS):
@@ -140,4 +124,3 @@ class pysecuritas():
         else:
             status = {'RES': 'KO', 'MSG': 'Invalid command.'}
             return status
-

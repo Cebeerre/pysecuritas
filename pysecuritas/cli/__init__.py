@@ -13,7 +13,7 @@ def run_command(args=None) -> None:
     :param args: arguments to execute the operation (including operation to be performed)
     """
 
-    cli_cmd: CLICommand = CLICommand()
+    cli_cmd = CLICommand()
     cli_cmd.parse(args)
     cli_cmd.run()
     cli_cmd.pretty_print()

@@ -4,12 +4,11 @@
 """
 
 import unittest
-from typing import List
 
 from pysecuritas.cli.cli_command import CLICommand
 
 
-class TestCLI(unittest.TestCase):
+class TestCLICommand(unittest.TestCase):
     """
     Test suite for cli operations
     """
@@ -20,7 +19,7 @@ class TestCLI(unittest.TestCase):
         """
 
         cli_command = CLICommand()
-        arguments: List[str] = ["-u", "u1", "-p", "p1", "-i", "i1", "-c", "c1", "-l", "l1", "-s", "s1", "command1"]
+        arguments = ["-u", "u1", "-p", "p1", "-i", "i1", "-c", "c1", "-l", "l1", "-s", "s1", "command1"]
         cli_command.parse(arguments)
         self.assertEqual("u1", cli_command.args.username)
         self.assertEqual("p1", cli_command.args.password)

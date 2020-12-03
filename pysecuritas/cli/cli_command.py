@@ -6,7 +6,7 @@
 import argparse
 import json
 import textwrap
-from typing import List, Dict
+from typing import List
 
 from pysecuritas.__version__ import __description__
 from pysecuritas.api.pysecuritas import pysecuritas
@@ -23,9 +23,9 @@ class CLICommand:
         Class initialization
         """
 
-        self.parser: [argparse.ArgumentParser, None] = None
-        self.args: [argparse.Namespace, None] = None
-        self.result: [Dict[str, any], None] = None
+        self.parser = None
+        self.args = None
+        self.result = None
 
     def parse(self, args: List[str]) -> None:
         """
@@ -68,7 +68,7 @@ class CLICommand:
 
         self.args = parser.parse_args(args)
 
-    def run(self):
+    def run(self) -> None:
         """
         Runs a the command provided on cli arguments
 

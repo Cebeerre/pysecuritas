@@ -24,7 +24,8 @@ requires = [
 ]
 
 test_requirements = [
-    "pytest>=3"
+    "pytest>=3",
+    "requests-mock>=1.8.0"
 ]
 
 setup(

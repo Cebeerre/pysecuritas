@@ -3,9 +3,7 @@
     :copyright: © pysecuritas, All Rights Reserved
 """
 
-from typing import Dict, List
-
-DALARM_OPS: Dict[str, str] = {
+DALARM_OPS = {
     'ARM': 'arm all sensors (inside)',
     'ARMDAY': 'arm in day mode (inside)',
     'ARMNIGHT': 'arm in night mode (inside)',
@@ -17,24 +15,24 @@ DALARM_OPS: Dict[str, str] = {
     'IMG': 'Take a picture (requires -s)'
 }
 
-DAPI_OPS: Dict[str, str] = {
+DAPI_OPS = {
     'ACT_V2': 'get the activity log',
     'SRV': 'SIM Number and INSTIBS',
     'MYINSTALLATION': 'Sensor IDs and other info'
 }
 
-ALARM_OPS: List[str] = list(DALARM_OPS.keys())
-API_OPS: List[str] = list(DAPI_OPS.keys())
+ALARM_OPS = list(DALARM_OPS.keys())
+API_OPS = list(DAPI_OPS.keys())
 
 
-def get_available_commands() -> Dict[str, str]:
+def get_available_commands():
     """
     Returns a dictionary with all available commands and their descriptions
 
     :return: a dictionary with all available commands
     """
 
-    commands: Dict[str, str] = DALARM_OPS.copy()
+    commands = DALARM_OPS.copy()
     commands.update(DAPI_OPS)
 
     return commands
