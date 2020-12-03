@@ -1,3 +1,5 @@
+![](https://img.shields.io/pypi/v/pysecuritas) ![](https://img.shields.io/pypi/pyversions/pysecuritas.svg) ![](https://pypi.org/project/pysecuritas/) ![](https://img.shields.io/pypi/dm/pysecuritas) ![](https://img.shields.io/github/license/Cebeerre/pysecuritas)
+
 # Securitas Direct API Client
 
 Client to access Securitas Direct through the API used by the following mobile Apps:
@@ -10,6 +12,11 @@ If you have a working account in the app, the client should work as well.
 [API specification and known projects](https://github.com/Cebeerre/SecuritasDirectAPI)
 
 **_NOTE:_** THIS PROJECT IS NOT IN ANY WAY ASSOCIATED WITH OR RELATED TO THE SECURITAS DIRECT-VERISURE GROUP COMPANIES. The information here and online is for educational and resource purposes only and therefore the developers do not endorse or condone any inappropriate use of it, and take no legal responsibility for the functionality or security of your alarms and devices.
+
+#Installing and Supported Versions
+pysecuritas is available on PyPI and officially supports Python 2.7 & 3.5+:
+
+`$ python -m pip install pysecuritas`
 
 # Usage
 
@@ -76,5 +83,3 @@ You can use it as well as a python class so you can use it in your integrations:
 >>> output
 OrderedDict([('RES', 'OK'), ('STATUS', '0'), ('MSG', 'Your Alarm is deactivated'), ('NUMINST', '12345')])
 ```
-
-I'm not a developer myself, so don't be too harsh on me !
