@@ -9,52 +9,12 @@ from datetime import datetime
 from typing import Dict
 
 import requests
-import xmltodict
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
+from pysecuritas.core.utils import get_response_value, handle_response
+
 log = logging.getLogger("pysecuritas")
-
-
-def handle_response(response) -> Dict:
-    """
-    Raises exception if request was not successful or parses
-    the xml response into a dictionary
-
-    :param response http response to be validated and parsed
-
-    :return: a parsed structured from the xml response
-    """
-
-    response.raise_for_status()
-
-    return xmltodict.parse(response.text)
-
-
-def get_response_value(response, *keys) -> (str, Dict):
-    """
-    Validates that a specific set of keys is in the response
-    and returns response result as well as the combination of those keys
-
-    :param response full response data
-    :param keys keys to build a subset from the full response
-
-    :return: the response result and the subset built
-    """
-
-    subset = response
-    if len(keys):
-        for k in keys:
-            try:
-                subset = subset[k]
-            except (KeyError, TypeError):
-                return None, None
-
-    try:
-        return response["PET"]["RES"], subset
-    except (KeyError, TypeError):
-        pass
-
 
 # in seconds
 DEFAULT_TIMEOUT = 30
@@ -66,75 +26,21 @@ class Session:
     A session will handle connectivity to interact with securitas installation and devices
     """
 
-    def __init__(self):
+    def __init__(self, username, password, installation, country, lang, sensor=None):
         """
         Session initializer
         """
 
-        self.username = None
-        self.password = None
-        self.country = None
-        self.installation = None
-        self.lang = None
+        self.username = username
+        self.password = password
+        self.installation = installation
+        self.country = country.upper()
+        self.lang = lang.lower()
+        self.sensor = sensor
         self.timeout = DEFAULT_TIMEOUT
         self.session = None
         self.login_hash = None
         requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
-
-    def set_username(self, username: str):
-        """
-        Sets the value of `username`
-
-        :return: self
-        """
-
-        self.username = username
-
-        return self
-
-    def set_password(self, password: str):
-        """
-        Sets the value of `password`
-
-        :return: self
-        """
-
-        self.password = password
-
-        return self
-
-    def set_country(self, country: str):
-        """
-        Sets the value of `country`
-
-        :return: self
-        """
-
-        self.country = country
-
-        return self
-
-    def set_installation(self, installation: str):
-        """
-        Sets the value of `installation`
-
-        :return: self
-        """
-
-        self.installation = installation
-
-        return self
-
-    def set_lang(self, lang: str):
-        """
-        Sets the value of `installation`
-
-        :return: self
-        """
-
-        self.lang = lang
-
-        return self
 
     def set_timeout(self, timeout: int):
         """
@@ -160,6 +66,18 @@ class Session:
             self.session.mount("https://", HTTPAdapter(max_retries=Retry(total=3, backoff_factor=1)))
 
         return self.session
+
+    def build_payload(self, **params):
+        """
+        Builds a payload with session parameters and custom parameters
+        """
+
+        payload = {"Country": self.country, "user": self.username,
+                   "pwd": self.password, "lang": self.lang, "hash": self.login_hash, "callby": "AND_61",
+                   "numinst": self.installation, "panel": "SDVFAST"}
+        payload.update(params)
+
+        return payload
 
     def generate_request_id(self):
         """
@@ -188,6 +106,14 @@ class Session:
 
         log.info("Connected to securitas server")
         self.login_hash = login_hash
+
+    def validate_connection(self) -> None:
+        """
+        Check if session is already connected, if not, raise an exception
+        """
+
+        if self.login_hash is None:
+            raise ConnectionException("Session is not connected ")
 
     def get(self, payload) -> Dict:
         """
@@ -254,8 +180,10 @@ class Session:
 
         self.connect()
 
+        return self
 
-class ConnectionException(IOError):
+
+class ConnectionException(Exception):
     """
     Exception when unable to connect
     """

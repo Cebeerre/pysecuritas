@@ -19,17 +19,14 @@ pysecuritas is available on PyPI and officially supports Python 2.7 & 3.5+:
 `$ python -m pip install pysecuritas`
 
 # Usage
-
+## Command line
 ```
-usage: pysecuritas.py [-h] -u USERNAME -p PASSWORD -i INSTALLATION -c COUNTRY -l
-                   LANGUAGE [-s SENSOR]
-                   COMMAND
+usage: pysecuritas [options]
 
-Securitas Direct API Client
-https://github.com/Cebeerre/pysecuritas
+Python library to retrieve and interact with securitas devices.
 
 positional arguments:
-  COMMAND               ARM: arm all sensors (inside)
+  command               ARM: arm all sensors (inside)
                         ARMDAY: arm in day mode (inside)
                         ARMNIGHT: arm in night mode (inside)
                         PERI: arm (only) the perimeter sensors
@@ -37,10 +34,10 @@ positional arguments:
                         ARMANNEX: arm the secondary alarm
                         DARMANNEX: disarm the secondary alarm
                         EST: return the panel status
-                        IMG: Take a picture (requires -s)
                         ACT_V2: get the activity log
                         SRV: SIM Number and INSTIBS
                         MYINSTALLATION: Sensor IDs and other info
+                        IMG: Take a picture (requires -s)
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -51,9 +48,9 @@ optional arguments:
   -i INSTALLATION, --installation INSTALLATION
                         Installation/Facility number (appears on the website).
   -c COUNTRY, --country COUNTRY
-                        Your country (UPPERCASE): ES, IT, FR, GB, PT ...
+                        Your country: ES, IT, FR, GB, PT ...
   -l LANGUAGE, --language LANGUAGE
-                        Your language (lowercase): es, it, fr, en, pt ...
+                        Your language: es, it, fr, en, pt ...
   -s SENSOR, --sensor SENSOR
                         The sensor ID (to take a picture using IMG)
 ```
@@ -73,13 +70,20 @@ You'll get a json with the API output:
 }
 ```
 
+## API
 You can use it as well as a python class so you can use it in your integrations:
+There three main api endpoints:
+- **alarm**: provides access to alarm actions such as arm and disarm
+- **camera**: takes snapshots from camera sensors
+- **installation**: retrieves basic information about the installation
 
+Example getting alarm status: 
 ```
->>> from pysecuritas import pysecuritas
->>> my_dict = { 'username': 'michael', 'password': 'mypassword', 'language':'en', 'country':'GB', 'installation':'12345' }
->>> client=pysecuritas(**my_dict)
->>> output=client.operate_alarm('EST')
+>>> from pysecuritas.core.session import Session
+>>> from pysecuritas.api.alarm import Alarm
+>>> session = Session(username, password, installation, country, language, sensor)
+>>> session.connect()
+>>> output = Alarm(session).get_status()
 >>> output
 OrderedDict([('RES', 'OK'), ('STATUS', '0'), ('MSG', 'Your Alarm is deactivated'), ('NUMINST', '12345')])
 ```

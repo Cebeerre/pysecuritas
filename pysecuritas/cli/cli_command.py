@@ -9,8 +9,10 @@ import textwrap
 from typing import List
 
 from pysecuritas.__version__ import __description__
-from pysecuritas.api.pysecuritas import pysecuritas
-from pysecuritas.core.commands import get_available_commands
+from pysecuritas.api.alarm import get_available_commands as alarm_commands, Alarm
+from pysecuritas.api.camera import get_available_commands as camera_commands, Camera
+from pysecuritas.api.installation import get_available_commands as installation_commands, Installation
+from pysecuritas.core.session import Session
 
 
 class CLICommand:
@@ -61,7 +63,9 @@ class CLICommand:
                             '--sensor',
                             help='The sensor ID (to take a picture using IMG)',
                             required=False)
-        commands = get_available_commands()
+        commands = alarm_commands().copy()
+        commands.update(installation_commands())
+        commands.update(camera_commands())
         parser.add_argument("command",
                             help=textwrap.dedent('\n'.join([': '.join(i) for i in commands.items()])),
                             type=str)
@@ -75,8 +79,16 @@ class CLICommand:
         :return: the result from the operation
         """
 
-        client = pysecuritas(self.args)
-        self.result = client.operate_alarm(self.args.command)
+        command = self.args.command
+
+        with Session(self.args.username, self.args.password, self.args.installation, self.args.country,
+                     self.args.language, self.args.sensor) as session:
+            if command in alarm_commands():
+                self.result = Alarm(session).execute_command(command)
+            elif command in installation_commands():
+                self.result = Installation(session).execute_command(command)
+            elif command in camera_commands():
+                self.result = Camera(session).execute_command(command)
 
     def pretty_print(self) -> None:
         """
