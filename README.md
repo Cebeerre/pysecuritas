@@ -5,7 +5,7 @@
 Client to access Securitas Direct through the API used by the following mobile Apps:
 
 - [Android App](https://play.google.com/store/apps/details?id=com.securitasdirect.android.mycontrol&hl=en&gl=US)
-- [IOS App](https://play.google.com/store/apps/details?id=com.securitasdirect.android.mycontrol&hl=en&gl=US)
+- [IOS App](https://apps.apple.com/es/app/my-verisure-securitas-direct/id385076046)
 
 If you have a working account in the app, the client should work as well.
 
@@ -13,7 +13,7 @@ If you have a working account in the app, the client should work as well.
 
 **_NOTE:_** THIS PROJECT IS NOT IN ANY WAY ASSOCIATED WITH OR RELATED TO THE SECURITAS DIRECT-VERISURE GROUP COMPANIES. The information here and online is for educational and resource purposes only and therefore the developers do not endorse or condone any inappropriate use of it, and take no legal responsibility for the functionality or security of your alarms and devices.
 
-#Installing and Supported Versions
+# Installing and Supported Versions
 pysecuritas is available on PyPI and officially supports Python 2.7 & 3.5+:
 
 `$ python -m pip install pysecuritas`
