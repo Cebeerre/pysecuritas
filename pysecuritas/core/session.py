@@ -107,12 +107,19 @@ class Session:
         log.info("Connected to securitas server")
         self.login_hash = login_hash
 
+    def is_connected(self) -> bool:
+        """
+        Check if this session is connected
+        """
+
+        return self.login_hash is not None
+
     def validate_connection(self) -> None:
         """
         Check if session is already connected, if not, raise an exception
         """
 
-        if self.login_hash is None:
+        if not self.is_connected():
             raise ConnectionException("Session is not connected ")
 
     def get(self, payload) -> Dict:

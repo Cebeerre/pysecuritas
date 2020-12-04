@@ -25,7 +25,7 @@ class TestSession(unittest.TestCase):
         self.assertEqual("u1", session.username)
         self.assertEqual("p1", session.password)
         self.assertEqual("i1", session.installation)
-        self.assertEqual("c1", session.country)
+        self.assertEqual("C1", session.country)
         self.assertEqual("l1", session.lang)
         self.assertEqual("s1", session.sensor)
         self.assertEqual(30, session.timeout)
@@ -99,6 +99,7 @@ class TestSession(unittest.TestCase):
             body='<?xml version="1.0" encoding="UTF-8"?><PET><RES>OK</RES><HASH>11111111111</HASH></PET>'
         )
 
+        self.assertFalse(session.is_connected())
         with pytest.raises(ConnectionException):
             session.validate_connection()
 
@@ -120,6 +121,7 @@ class TestSession(unittest.TestCase):
         )
 
         session.connect()
+        self.assertTrue(session.is_connected())
         self.assertEqual("11111111111", session.login_hash)
 
     @responses.activate
