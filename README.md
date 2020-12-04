@@ -5,7 +5,7 @@
 Client to access Securitas Direct through the API used by the following mobile Apps:
 
 - [Android App](https://play.google.com/store/apps/details?id=com.securitasdirect.android.mycontrol&hl=en&gl=US)
-- [IOS App](https://play.google.com/store/apps/details?id=com.securitasdirect.android.mycontrol&hl=en&gl=US)
+- [IOS App](https://apps.apple.com/es/app/my-verisure-securitas-direct/id385076046)
 
 If you have a working account in the app, the client should work as well.
 
