@@ -11,7 +11,7 @@ import requests
 import responses
 from requests import HTTPError
 
-from pysecuritas.core.utils import handle_response, get_response_value, clean_response
+from pysecuritas.core.utils import handle_response, clean_response
 
 
 class TestUtils(unittest.TestCase):
@@ -26,18 +26,6 @@ class TestUtils(unittest.TestCase):
         response = {"PET": {"RES": "OK", "IN": {"c2": "v3"}, "BLOQ": "B1"}}
         response = clean_response(response)
         self.assertEqual({"RES": "OK", "IN": {"c2": "v3"}}, response)
-
-    def test_get_response_value(self):
-        # test subset equals to original response
-        response = {"PET": {"RES": "OK", "IN": {"c2": "v3"}}}
-        result, subset = get_response_value(response)
-        self.assertEqual("OK", result)
-        self.assertEqual(response, subset)
-        # test known subset
-        result, subset = get_response_value(response, "PET", "IN")
-        self.assertEqual({"c2": "v3"}, subset)
-        # test unknown subset
-        self.assertEqual((None, None), get_response_value(response, "PET", "OUT"))
 
     @responses.activate
     def test_unsuccessful_response(self):
@@ -80,7 +68,7 @@ class TestUtils(unittest.TestCase):
             responses.GET,
             "https://securitas.dummy.com",
             status=200,
-            body='<tag>correct</tag>'
+            body='<PET>correct</PET>'
         )
 
-        self.assertEqual("correct", handle_response(requests.get("https://securitas.dummy.com"))["tag"])
+        self.assertEqual("correct", handle_response(requests.get("https://securitas.dummy.com")))

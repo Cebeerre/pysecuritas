@@ -156,3 +156,28 @@ class TestSession(unittest.TestCase):
 
         with Session("u1", "p1", "i1", "c1", "l1") as session:
             pass
+
+    @responses.activate
+    def test_re_login(self):
+        """
+        Tests an valid close attempt
+        """
+
+        responses.add(
+            responses.GET,
+            BASE_URL,
+            status=200,
+            body='<?xml version="1.0" encoding="UTF-8"?><PET><RES>ERROR</RES><ERR>60067</ERR></PET>'
+        )
+
+        responses.add(
+            responses.GET,
+            BASE_URL,
+            status=200,
+            body='<?xml version="1.0" encoding="UTF-8"?><PET><RES>OK</RES><HASH>11111111111</HASH></PET>'
+        )
+
+        session = Session("u1", "p1", "i1", "c1", "l1")
+        session.login_hash = "2"
+        session.get({"ACTION": "REQ"})
+        self.assertEqual("11111111111", session.login_hash)

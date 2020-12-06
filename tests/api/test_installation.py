@@ -11,7 +11,7 @@ import responses
 
 from pysecuritas.api.installation import handle_result, RequestException, Installation
 from pysecuritas.core.session import BASE_URL, Session
-from pysecuritas.core.utils import handle_response, get_response_value
+from pysecuritas.core.utils import handle_response
 
 
 class TestInstallation(unittest.TestCase):
@@ -63,30 +63,18 @@ class TestInstallation(unittest.TestCase):
         Tests a request timeout
         """
 
-        def match_act(request_body):
-            return request_body is None or "ACT_V2" in request_body
-
-        def match_inf(request_body):
-            return request_body is None or "INF" in request_body
-
         responses.add(
             responses.GET,
             BASE_URL,
             status=200,
-            body='<?xml version="1.0" encoding="UTF-8"?><PET><RES>OK</RES><LIST><REG signaltype="16" idsignal="1"></REG><REG signaltype="16" idsignal="1"></REG></LIST></PET>',
-            match=[
-                match_act
-            ]
+            body='<?xml version="1.0" encoding="UTF-8"?><PET><RES>OK</RES><LIST><REG signaltype="16" idsignal="1"></REG><REG signaltype="16" idsignal="1"></REG></LIST></PET>'
         )
 
         responses.add(
             responses.GET,
             BASE_URL,
             status=200,
-            body='<?xml version="1.0" encoding="UTF-8"?><PET><RES>OK</RES><HASH>11111111111</HASH></PET>',
-            match=[
-                match_inf
-            ]
+            body='<?xml version="1.0" encoding="UTF-8"?><PET><RES>OK</RES><HASH>11111111111</HASH></PET>'
         )
 
         session = Session("u1", "p1", "i1", "c1", "l1")
@@ -130,7 +118,8 @@ class TestInstallation(unittest.TestCase):
             )
 
             result = handle_response(requests.get(BASE_URL))
-            return handle_result(get_response_value(result)[0], result)
+
+            return handle_result(result.get("RES"), result)
 
         with pytest.raises(RequestException):
             assert_result("ERROR")

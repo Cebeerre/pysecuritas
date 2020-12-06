@@ -12,7 +12,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
-from pysecuritas.core.utils import get_response_value, handle_response
+from pysecuritas.core.utils import handle_response
 
 log = logging.getLogger("pysecuritas")
 
@@ -98,8 +98,8 @@ class Session:
                              "lang": self.lang, "request": "LOGIN",
                              "ID": self.generate_request_id()})
 
-        result, login_hash = get_response_value(response, "PET", "HASH")
-        if result != "OK" or not login_hash:
+        login_hash = response.get("HASH")
+        if response.get("RES") != "OK" or not login_hash:
             log.error("Unable to login: %s", json.dumps(response))
 
             raise ConnectionException("Unable to login ")
@@ -125,26 +125,24 @@ class Session:
     def get(self, payload) -> Dict:
         """
         Performs a GET request and returns a dictionary with the parsed response
-
+        If response happens to end in error, session will try to re-login and repeat the request
         :param payload get request parameters
 
         :return: a parsed structured from the xml response
         """
 
-        return handle_response(
-            self.get_or_create_session().get(BASE_URL, params=payload, timeout=self.timeout))
+        def _get():
+            return handle_response(self.get_or_create_session().get(BASE_URL, params=payload, timeout=self.timeout))
 
-    def post(self, payload) -> Dict:
-        """
-        Performs a POST request and returns a dictionary with the parsed response
+        result = _get()
+        if result.get("ERR") in ("60067", "60022"):
+            self.session = None
+            self.connect()
+            payload["hash"] = self.login_hash
 
-        :param payload get request parameters
+            return _get()
 
-        :return: a parsed structured from the xml response
-        """
-
-        return handle_response(
-            self.get_or_create_session().post(BASE_URL, params=payload, timeout=self.timeout))
+        return result
 
     def close(self) -> None:
         """
@@ -160,8 +158,7 @@ class Session:
                                  "hash": self.login_hash,
                                  "ID": self.generate_request_id()})
 
-            result, login_hash = get_response_value(response)
-            if result != "OK":
+            if response.get("RES") != "OK":
                 log.error("Unable to close session: %s", json.dumps(response))
 
                 raise ConnectionException("Unable to logout")

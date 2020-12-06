@@ -6,9 +6,8 @@ import base64
 from datetime import datetime
 from typing import Dict
 
+from pysecuritas.api.installation import DEFAULT_TIMEOUT
 from pysecuritas.api.installation import Installation
-from pysecuritas.api.installation import handle_result, DEFAULT_TIMEOUT
-from pysecuritas.core.session import get_response_value
 
 ID_SERVICE = 1
 
@@ -69,22 +68,3 @@ class Camera(Installation):
                 f.write(base64.b64decode(img['#text']))
 
         return {"RES": "OK", "MSG": "Images written to disk.", "FILES": files}
-
-    def request(self, action, *arg, **params) -> Dict:
-        """
-        Performs a double request
-        The first request is sent asynchronously with a given id
-        That same id is then used to get the result
-
-        :param action action to be performed
-        :param params additional request parameters
-
-        :return: a response or nothing if timeout happens
-        """
-
-        payload = self.session.build_payload(request=action, ID=self.session.generate_request_id(), **params)
-        self.session.validate_connection()
-        result = self.session.get(payload)
-        result = handle_result(get_response_value(result)[0], result)
-        if result:
-            return result

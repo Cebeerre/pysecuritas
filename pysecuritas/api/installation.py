@@ -5,8 +5,6 @@
 import time
 from typing import Dict
 
-from pysecuritas.core.utils import clean_response, get_response_value
-
 DEFAULT_TIMEOUT = 60
 RATE_LIMIT = 1
 TIME_FILTER = "3"
@@ -39,10 +37,10 @@ def handle_result(status, result):
         return
 
     if status == "ERROR":
-        raise RequestException(result["PET"]["MSG"])
+        raise RequestException(result["MSG"])
 
     if status == "OK":
-        return clean_response(result)
+        return result
 
 
 class Installation:
@@ -86,21 +84,21 @@ class Installation:
         :param request_id request id already calculated (reused)
         """
 
-        return self.request("ACT_V2", request_id, timefilter=TIME_FILTER, activityfilter=ACTIVITY_FILTER)
+        return self.sync_request("ACT_V2", request_id, timefilter=TIME_FILTER, activityfilter=ACTIVITY_FILTER)
 
     def get_sim_and_instibs(self) -> Dict:
         """
         Gets information about SIM number and INSTIBS
         """
 
-        return self.request("SRV")
+        return self.sync_request("SRV")
 
     def get_installation_info(self) -> Dict:
         """
         Gets generic information about the installation including sensor IDs
         """
 
-        return self.request("MYINSTALLATION")
+        return self.sync_request("MYINSTALLATION")
 
     def get_inf(self) -> Dict:
         """
@@ -117,7 +115,8 @@ class Installation:
             log = self.get_activity_log(request_id)["LIST"]["REG"][0]
             if log["@signaltype"] == "16":
                 time.sleep(RATE_LIMIT)
-                return self.request("INF", request_id, idsignal=log["@idsignal"], signaltype="16")
+
+                return self.sync_request("INF", request_id, idsignal=log["@idsignal"], signaltype="16")
 
     def async_request(self, action, **params) -> Dict:
         """
@@ -140,12 +139,11 @@ class Installation:
         threshold = time.time() + self.timeout
         while time.time() < threshold:
             time.sleep(RATE_LIMIT)
-            result = self.session.get(payload)
-            result = handle_result(get_response_value(result)[0], result)
+            result = self.request(payload)
             if result:
                 return result
 
-    def request(self, action, request_id=None, **params) -> Dict:
+    def sync_request(self, action, request_id=None, *arg, **params) -> Dict:
         """
         Performs a simple request
 
@@ -160,8 +158,20 @@ class Installation:
                                              ID=request_id if request_id else self.session.generate_request_id(),
                                              **params)
         self.session.validate_connection()
+
+        return self.request(payload)
+
+    def request(self, payload):
+        """
+        Performs a get request and returns the result
+
+        :param payload payload sent on the request
+
+        :return: a result from the request
+        """
+
         result = self.session.get(payload)
-        result = handle_result(get_response_value(result)[0], result)
+        result = handle_result(result.get("RES"), result)
         if result:
             return result
 
