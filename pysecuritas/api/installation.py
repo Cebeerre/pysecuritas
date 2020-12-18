@@ -93,6 +93,15 @@ class Installation:
 
         return self.sync_request("SRV")
 
+    def get_alias(self) -> str:
+        """
+        Returns the installation alias
+
+        :return: the installation alias
+        """
+
+        return self.get_sim_and_instibs()["INSTALATION"]["ALIAS"]
+
     def get_installation_info(self) -> Dict:
         """
         Gets generic information about the installation including sensor IDs

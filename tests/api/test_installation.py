@@ -34,8 +34,8 @@ class TestInstallation(unittest.TestCase):
 
         session = Session("u1", "p1", "i1", "c1", "l1")
         session.login_hash = "1"
-        alarm = Installation(session, 1)
-        self.assertIsNone(alarm.async_request("DUMMY"))
+        installation = Installation(session, 1)
+        self.assertIsNone(installation.async_request("DUMMY"))
         self.assertGreaterEqual(len(responses.calls), 2)
 
     @responses.activate
@@ -160,3 +160,21 @@ class TestInstallation(unittest.TestCase):
         assert_command("ACT_V2")
         assert_command("SRV")
         assert_command("MYINSTALLATION")
+
+    @responses.activate
+    def test_get_installation_alias(self):
+        """
+        Tests getting the installation alias
+        """
+
+        responses.add(
+            responses.GET,
+            BASE_URL,
+            status=200,
+            body='<?xml version="1.0" encoding="UTF-8"?><PET><RES>OK</RES><INSTALATION><ALIAS>alias</ALIAS></INSTALATION></PET>'
+        )
+
+        session = Session("u1", "p1", "i1", "c1", "l1")
+        session.login_hash = "1"
+        installation = Installation(session, 10)
+        self.assertEqual("alias", installation.get_alias())
