@@ -19,7 +19,8 @@ def get_available_commands() -> Dict:
     return {
         "ACT_V2": "get the activity log",
         "SRV": "SIM Number and INSTIBS",
-        "MYINSTALLATION": "Sensor IDs and other info"
+        "MYINSTALLATION": "Sensor IDs and other info",
+        "INS": "Information of all installations"
     }
 
 
@@ -71,6 +72,9 @@ class Installation:
         if command == "ACT_V2":
             return self.get_activity_log()
 
+        if command == "INS":
+            return self.get_installations()
+
         if command == "SRV":
             return self.get_sim_and_instibs()
 
@@ -108,6 +112,13 @@ class Installation:
         """
 
         return self.sync_request("MYINSTALLATION")
+
+    def get_installations(self):
+        """
+        Returns all installations
+        """
+
+        return self.sync_request("INS")
 
     def get_inf(self) -> Dict:
         """

@@ -50,7 +50,7 @@ class CLICommand:
         parser.add_argument('-i',
                             '--installation',
                             help='Installation/Facility number (appears on the website).',
-                            required=True)
+                            required=False)
         parser.add_argument('-c',
                             '--country',
                             help='Your country: ES, IT, FR, GB, PT ...',

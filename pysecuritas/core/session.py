@@ -74,7 +74,10 @@ class Session:
 
         payload = {"Country": self.country, "user": self.username,
                    "pwd": self.password, "lang": self.lang, "hash": self.login_hash, "callby": "AND_61",
-                   "numinst": self.installation, "panel": "SDVFAST"}
+                   "panel": "SDVFAST"}
+        if self.installation:
+            payload["numinst"] = self.installation
+
         payload.update(params)
 
         return payload

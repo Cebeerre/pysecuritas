@@ -160,6 +160,7 @@ class TestInstallation(unittest.TestCase):
         assert_command("ACT_V2")
         assert_command("SRV")
         assert_command("MYINSTALLATION")
+        assert_command("INS")
 
     @responses.activate
     def test_get_installation_alias(self):
