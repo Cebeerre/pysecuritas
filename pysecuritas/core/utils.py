@@ -2,12 +2,11 @@
 """
     :copyright: © pysecuritas, All Rights Reserved
 """
-from typing import Dict
 
 import xmltodict
 
 
-def handle_response(response) -> Dict:
+def handle_response(response):
     """
     Raises exception if request was not successful or parses
     the xml response into a dictionary
@@ -22,7 +21,7 @@ def handle_response(response) -> Dict:
     return clean_response(xmltodict.parse(response.text))
 
 
-def clean_response(result) -> Dict:
+def clean_response(result):
     """
     Clean a response by removing unnecessary fields
     """

@@ -2,8 +2,8 @@
 """
     :copyright: © pysecuritas, All Rights Reserved
 """
+
 import time
-from typing import Dict
 
 DEFAULT_TIMEOUT = 60
 RATE_LIMIT = 1
@@ -11,7 +11,7 @@ TIME_FILTER = "3"
 ACTIVITY_FILTER = "0"
 
 
-def get_available_commands() -> Dict:
+def get_available_commands():
     """
     Returns all available commands
     """
@@ -60,7 +60,7 @@ class Installation:
         self.session = session
         self.timeout = timeout
 
-    def execute_command(self, command) -> Dict:
+    def execute_command(self, command):
         """
         Executes a command
 
@@ -81,7 +81,7 @@ class Installation:
         if command == "MYINSTALLATION":
             return self.get_installation_info()
 
-    def get_activity_log(self, request_id=None) -> Dict:
+    def get_activity_log(self, request_id=None):
         """
         Gets activity log
 
@@ -90,14 +90,14 @@ class Installation:
 
         return self.sync_request("ACT_V2", request_id, timefilter=TIME_FILTER, activityfilter=ACTIVITY_FILTER)
 
-    def get_sim_and_instibs(self) -> Dict:
+    def get_sim_and_instibs(self):
         """
         Gets information about SIM number and INSTIBS
         """
 
         return self.sync_request("SRV")
 
-    def get_alias(self) -> str:
+    def get_alias(self):
         """
         Returns the installation alias
 
@@ -106,7 +106,7 @@ class Installation:
 
         return self.get_sim_and_instibs()["INSTALATION"]["ALIAS"]
 
-    def get_installation_info(self) -> Dict:
+    def get_installation_info(self):
         """
         Gets generic information about the installation including sensor IDs
         """
@@ -120,7 +120,7 @@ class Installation:
 
         return self.sync_request("INS")
 
-    def get_inf(self) -> Dict:
+    def get_inf(self):
         """
         Waits for signal 16 and gets the result from INF command
 
@@ -138,7 +138,7 @@ class Installation:
 
                 return self.sync_request("INF", request_id, idsignal=log["@idsignal"], signaltype="16")
 
-    def async_request(self, action, **params) -> Dict:
+    def async_request(self, action, **params):
         """
         Performs a double request
         The first request is sent asynchronously with a given id
@@ -163,7 +163,7 @@ class Installation:
             if result:
                 return result
 
-    def sync_request(self, action, request_id=None, *arg, **params) -> Dict:
+    def sync_request(self, action, request_id=None, *arg, **params):
         """
         Performs a simple request
 

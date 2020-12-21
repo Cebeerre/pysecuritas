@@ -3,12 +3,10 @@
     :copyright: © pysecuritas, All Rights Reserved
 """
 
-from typing import Dict
-
 from pysecuritas.api.installation import Installation, DEFAULT_TIMEOUT
 
 
-def get_available_commands() -> Dict:
+def get_available_commands():
     """
     Returns all available commands
     """
@@ -35,9 +33,9 @@ class Alarm(Installation):
         Initializes alarm api
         """
 
-        super(Alarm, self).__init__(session, timeout)
+        Installation.__init__(self, session, timeout)
 
-    def execute_command(self, command) -> Dict:
+    def execute_command(self, command):
         """
         Executes a command
 
@@ -70,56 +68,56 @@ class Alarm(Installation):
         if command == "EST":
             return self.get_status()
 
-    def activate_total_mode(self) -> Dict:
+    def activate_total_mode(self):
         """
         Activates alarm in total mode (all sensors)
         """
 
         return self.async_request("ARM")
 
-    def activate_secondary_mode(self) -> Dict:
+    def activate_secondary_mode(self):
         """
         Activates secondary alarm
         """
 
         return self.async_request("ARMANNEX")
 
-    def activate_day_mode(self) -> Dict:
+    def activate_day_mode(self):
         """
         Activates alarm in day mode (only sensors configured for day mode will be activated)
         """
 
         return self.async_request("ARMDAY")
 
-    def activate_night_mode(self) -> Dict:
+    def activate_night_mode(self):
         """
         Activates alarm in night mode (only sensors configured for night mode will be activated)
         """
 
         return self.async_request("ARMNIGHT")
 
-    def activate_perimeter_mode(self) -> Dict:
+    def activate_perimeter_mode(self):
         """
         Activates alarm in perimeter mode (only sensors configured for exterior mode will be activated)
         """
 
         return self.async_request("PERI")
 
-    def get_status(self) -> Dict:
+    def get_status(self):
         """
         Retrieves current alarm status
         """
 
         return self.async_request("EST")
 
-    def disconnect(self) -> Dict:
+    def disconnect(self):
         """
         Disconnects the alarm
         """
 
         return self.async_request("DARM")
 
-    def disconnect_secondary(self) -> Dict:
+    def disconnect_secondary(self):
         """
         Disconnects the secondary alarm
         """

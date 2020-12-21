@@ -6,7 +6,6 @@
 import argparse
 import json
 import textwrap
-from typing import List
 
 from pysecuritas.__version__ import __description__
 from pysecuritas.api.alarm import get_available_commands as alarm_commands, Alarm
@@ -29,7 +28,7 @@ class CLICommand:
         self.args = None
         self.result = None
 
-    def parse(self, args: List[str]) -> None:
+    def parse(self, args):
         """
         Creates a parser for the cli entrypoint and parses the provided arguments
         against the newly created parser
@@ -72,7 +71,7 @@ class CLICommand:
 
         self.args = parser.parse_args(args)
 
-    def run(self) -> None:
+    def run(self):
         """
         Runs a the command provided on cli arguments
 
@@ -90,7 +89,7 @@ class CLICommand:
             elif command in camera_commands():
                 self.result = Camera(session).execute_command(command)
 
-    def pretty_print(self) -> None:
+    def pretty_print(self):
         """
         Prints the result from the executed operation
         """

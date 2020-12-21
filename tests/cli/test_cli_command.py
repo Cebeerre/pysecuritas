@@ -16,7 +16,7 @@ class TestCLICommand(unittest.TestCase):
     Test suite for cli operations
     """
 
-    def test_arguments(self) -> None:
+    def test_arguments(self):
         """
         Tests parsing of arguments
         """
@@ -33,7 +33,7 @@ class TestCLICommand(unittest.TestCase):
         self.assertEqual("command1", cli_command.args.command)
 
     @responses.activate
-    def test_run_alarm_command(self) -> None:
+    def test_run_alarm_command(self):
         """
         Tests running a command from each api entity (alarm, installation, ...)
         """
@@ -55,7 +55,7 @@ class TestCLICommand(unittest.TestCase):
         self.assertTrue("ARM2" in responses.calls[2].request.params["request"])
 
     @responses.activate
-    def test_run_alarm_command(self) -> None:
+    def test_run_alarm_command(self):
         """
         Tests running a command from each api entity (alarm, installation, ...)
         """

@@ -13,14 +13,13 @@ from pysecuritas.core.session import Session, BASE_URL
 
 class TestAlarm(unittest.TestCase):
 
-
     @responses.activate
     def test_command_parameters(self):
         """
         Tests all requests base action parameters
         """
 
-        session = Session("u1", "p1", "i1","c1", "l1")
+        session = Session("u1", "p1", "i1", "c1", "l1")
         session.login_hash = "1"
         alarm = Alarm(session, 10)
         _self = self

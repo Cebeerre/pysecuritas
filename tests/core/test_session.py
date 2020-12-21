@@ -16,7 +16,7 @@ class TestSession(unittest.TestCase):
     Test suite for session
     """
 
-    def test_basic_configuration(self) -> None:
+    def test_basic_configuration(self):
         """
         Tests session basic configurations
         """
@@ -32,7 +32,7 @@ class TestSession(unittest.TestCase):
         session.set_timeout(60)
         self.assertEqual(60, session.timeout)
 
-    def test_build_payload(self) -> None:
+    def test_build_payload(self):
         """
         Tests building payload for performing actions against the api
         """

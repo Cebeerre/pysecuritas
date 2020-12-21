@@ -6,7 +6,7 @@
 from pysecuritas.cli.cli_command import CLICommand
 
 
-def run_command(args=None) -> None:
+def run_command(args=None):
     """
     Runs a command with the provided arguments
 

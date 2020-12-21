@@ -6,7 +6,6 @@
 import json
 import logging
 from datetime import datetime
-from typing import Dict
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -42,7 +41,7 @@ class Session:
         self.login_hash = None
         requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
 
-    def set_timeout(self, timeout: int):
+    def set_timeout(self, timeout):
         """
         Sets the value of `timeout`
 
@@ -89,7 +88,7 @@ class Session:
 
         return "AND_________________________" + self.username + datetime.now().strftime("%Y%m%d%H%M%S")
 
-    def connect(self) -> None:
+    def connect(self):
         """
         Connects to api by logging in and creating a new session
         """
@@ -110,14 +109,14 @@ class Session:
         log.info("Connected to securitas server")
         self.login_hash = login_hash
 
-    def is_connected(self) -> bool:
+    def is_connected(self):
         """
         Check if this session is connected
         """
 
         return self.login_hash is not None
 
-    def validate_connection(self) -> None:
+    def validate_connection(self):
         """
         Check if session is already connected, if not, raise an exception
         """
@@ -125,7 +124,7 @@ class Session:
         if not self.is_connected():
             raise ConnectionException("Session is not connected ")
 
-    def get(self, payload) -> Dict:
+    def get(self, payload):
         """
         Performs a GET request and returns a dictionary with the parsed response
         If response happens to end in error, session will try to re-login and repeat the request
@@ -147,7 +146,7 @@ class Session:
 
         return result
 
-    def close(self) -> None:
+    def close(self):
         """
         Closes the session and logout from the api
         """

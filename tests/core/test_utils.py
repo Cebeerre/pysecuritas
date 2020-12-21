@@ -19,7 +19,7 @@ class TestUtils(unittest.TestCase):
     Test suite for utils file
     """
 
-    def test_clean_response(self) -> None:
+    def test_clean_response(self):
         """
         Tests response cleaning
         """

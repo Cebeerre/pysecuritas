@@ -4,13 +4,13 @@
 """
 
 import os
-from typing import Dict, AnyStr
 from codecs import open
+
 from setuptools import setup, find_packages
 
-base_dir: AnyStr = os.path.abspath(os.path.dirname(__file__))
-info: Dict[str, any] = {}
-with open(os.path.join(base_dir, "pysecuritas", "__version__.py"), "r", "utf-8") as v:
+base_dir = os.path.abspath(os.path.dirname(__file__))
+info = {}
+with open(os.path.join(base_dir, "pysecuritas", "__version__.py"), "r") as v:
     exec(v.read(), info)
 
 with open("README.md", "r", "utf-8") as r:

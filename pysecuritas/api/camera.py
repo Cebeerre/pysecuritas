@@ -4,7 +4,6 @@
 """
 import base64
 from datetime import datetime
-from typing import Dict
 
 from pysecuritas.api.installation import DEFAULT_TIMEOUT
 from pysecuritas.api.installation import Installation
@@ -12,7 +11,7 @@ from pysecuritas.api.installation import Installation
 ID_SERVICE = 1
 
 
-def get_available_commands() -> Dict:
+def get_available_commands():
     """
     Returns all available commands
     """
@@ -32,10 +31,10 @@ class Camera(Installation):
         Initializes alarm api
         """
 
-        super(Camera, self).__init__(session, timeout)
+        Installation.__init__(self, session, timeout)
         self.instibs = None
 
-    def execute_command(self, command) -> Dict:
+    def execute_command(self, command):
         """
         Executes a command
 
@@ -47,7 +46,7 @@ class Camera(Installation):
         if command == "IMG":
             return self.capture_snapshots()
 
-    def capture_snapshots(self) -> Dict:
+    def capture_snapshots(self):
         """
         Captures snapshots from a camera
         """
