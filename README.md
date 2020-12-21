@@ -37,6 +37,7 @@ positional arguments:
                         ACT_V2: get the activity log
                         SRV: SIM Number and INSTIBS
                         MYINSTALLATION: Sensor IDs and other info
+                        INS: Information of all installations
                         IMG: Take a picture (requires -s)
 
 optional arguments:
