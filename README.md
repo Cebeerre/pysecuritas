@@ -1,3 +1,6 @@
+> **⚠️ This repository is archived and no longer maintained.**  
+> The code remains available in read-only mode for reference purposes, but no further updates, issues, or pull requests will be accepted.
+
 ![](https://img.shields.io/pypi/v/pysecuritas) ![](https://img.shields.io/pypi/pyversions/pysecuritas.svg) ![](https://pypi.org/project/pysecuritas/) ![](https://img.shields.io/pypi/dm/pysecuritas) ![](https://img.shields.io/github/license/Cebeerre/pysecuritas)
 
 # Securitas Direct API Client
